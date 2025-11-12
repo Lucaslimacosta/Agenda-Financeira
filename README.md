@@ -266,16 +266,9 @@ Estamos desenvolvendo a **Agenda Financeira** com dedicação total, e sua contr
 ## 📞 Suporte
 
 Para dúvidas, sugestões ou feedback:
-- 📧 **Email**: [seu-email@exemplo.com]
+- 📧 **Email**: [luks.limacosta@hotmail.com] 
 - 💬 **GitHub Issues**: Relate problemas ou sugestões
-- 📱 **Demonstração**: Veja funcionando em tempo real
-
-## 🎉 Comece Agora!
-
-1. **Acesse a demonstração**: Veja todas as funcionalidades
-2. **Instale no seu dispositivo**: PWA completa
-3. **Personalize**: Escolha seu tema favorito
-4. **Comece a controlar**: Suas finanças nunca mais serão as mesmas
+- 📱 **Demonstração**: Veja funcionando em tempo real em breve.
 
 ---
 
@@ -383,4 +376,4 @@ Para dúvidas, sugestões ou feedback:
 
 ---
 
-**Desenvolvido com ❤️ para facilitar o controle financeiro pessoal**
+**Desenvolvido com  o intuito de ajudar todo e qualquer cidadão a cuidar melhor da sua gestão financeira de forma intuitiva e facilitada prezando o user experience.**
