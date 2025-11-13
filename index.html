@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>AGENDA FINANCEIRA</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/customization.css">
+    <link rel="stylesheet" href="css/automation.css">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="Imagem do WhatsApp de 2024-11-14 à(s) 21.42.02_a263ffdf.jpg">
+    <link rel="icon" href="Imagem do WhatsApp de 2024-11-14 à(s) 21.42.02_a263ffdf.jpg" type="image/jpeg">
+</head>
+<body>
+    <div id="loading-screen">
+        <img src="Imagem do WhatsApp de 2024-11-14 à(s) 21.42.02_a263ffdf.jpg" alt="Logo">
+        <h1>AGENDA FINANCEIRA</h1>
+        <h2>Seu app de gerenciamento e relatórios financeiros.</h2>
+        <p style="color: #ffd700; font-size: 14px; text-align: center; margin: 10px 0; font-weight: bold;">
+            VERSÃO DE DEMONSTRAÇÃO - NENHUM DADO SERÁ SALVO
+        </p>
+    </div>
+
+    <!-- Notificação personalizada -->
+    <div id="notification" class="notification" style="display:none;">
+        <div class="notification-content">
+            <span id="notification-message"></span>
+            <button onclick="fecharNotificacao()" class="notification-close">×</button>
+        </div>
+    </div>
+
+    <div class="header-content">
+        <img src="Imagem do WhatsApp de 2024-11-14 à(s) 21.42.02_a263ffdf.jpg" alt="logo" class="logo" id="logo-img">
+        <h3 id="app-title">AGENDA FINANCEIRA</h3><br>
+    </div>
+
+    <div>
+        <button onclick="abrirModalPersonalizar()" class="botao-personalizar">
+            <span class="botao-texto">Personalizar App</span>
+        </button>
+    </div>
+
+    <p style="color: #ffd700; font-size: 14px; text-align: center; margin: 10px 0; font-weight: bold;">
+        VERSÃO DE DEMONSTRAÇÃO - NENHUM DADO SERÁ SALVO
+    </p>
+
+    <div class="controles-funcionalidades">
+        <button onclick="abrirModalFuncionalidades()" class="botao-funcionalidades">
+            <span class="botao-texto">FUNCIONALIDADES E ATUALIZAÇÕES</span>
+        </button>
+    </div>
+
+    <div class="controles">
+        <button onclick="mesAnterior()" class="botao-seta" aria-label="Mês Anterior">
+            <span class="seta-icon">&#10094;</span>
+        </button>
+        <h2 id="mes-atual" style="color: var(--dourado); text-transform: uppercase; margin: 0 20px;"></h2>
+        <button onclick="proximoMes()" class="botao-seta" aria-label="Próximo Mês">
+            <span class="seta-icon">&#10095;</span>
+        </button>
+    </div>
+
+    <div class="calendario-container">
+        <div class="cabecalho-calendario">
+            <div class="dia-semana">Dom</div>
+            <div class="dia-semana">Seg</div>
+            <div class="dia-semana">Ter</div>
+            <div class="dia-semana">Qua</div>
+            <div class="dia-semana">Qui</div>
+            <div class="dia-semana">Sex</div>
+            <div class="dia-semana">Sáb</div>
+        </div>
+        <div class="calendario"></div>
+    </div>
+
+    <div id="modal-eventos" class="modal">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h3 id="modal-data" style="color: var(--dourado); margin: 0;"></h3>
+                <button onclick="fecharModalEventosDia()" class="fechar-btn">× FECHAR</button>
+            </div>
+            <div class="eventos-lista" id="lista-eventos-dia" style="margin-top: 20px;"></div>
+            <div class="controles" style="margin-top: 20px;">
+                <button onclick="abrirModalNovoEvento()" style="background-color: var(--dourado); color: var(--preto);">
+                    <span class="botao-texto">Adicionar Evento</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controles-principais">
+        <button onclick="abrirModalAutomacao()" class="botao-relatorio">
+            <span class="botao-texto">Automação</span>
+        </button>
+        <button onclick="gerarRelatorioMensal()" class="botao-relatorio">
+            <span class="botao-texto">Relatório Mensal</span>
+        </button>
+        <button onclick="gerarRelatorioAnual()" class="botao-relatorio">
+            <span class="botao-texto">Relatório Anual</span>
+        </button>
+        <button onclick="apagarDadosMes()" class="botao-resetar">
+            <span class="botao-texto">Limpar Mês Atual</span>
+        </button>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h3 style="color: var(--dourado); margin: 0;">ADICIONAR EVENTO</h3>
+                <p id="data-selecionada" style="color: var(--branco); margin: 5px 0;"></p>
+                <button onclick="fecharModal()" class="fechar-btn">× FECHAR</button>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <input type="text" id="evento-descricao" placeholder="Descrição" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                <input type="number" id="evento-valor" placeholder="Valor R$" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                <select id="evento-tipo" onchange="atualizarCamposEvento()" class="select-field" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                    <option value="entrada">ENTRADA</option>
+                    <option value="saida">SAÍDA</option>
+                    <option value="normal">AGENDAMENTO</option>
+                    <option value="cartao">COMPRA NO CRÉDITO OU PARCELADA</option>
+                </select>
+
+                <!-- Campos específicos para compras no cartão -->
+                <div id="campos-evento-cartao" style="display:none; margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label for="evento-parcelas" style="color: var(--dourado); display: block; margin-bottom: 5px;">Número de parcelas:</label>
+                        <input type="number" id="evento-parcelas" class="input-field" min="1" value="1" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                    </div>
+                    <div class="form-group">
+                        <label for="evento-vencimento" style="color: var(--dourado); display: block; margin-bottom: 5px;">Vencimento do cartão (dia do mês):</label>
+                        <input type="number" id="evento-vencimento" class="input-field" min="1" max="31" value="10" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                    </div>
+                    <p style="color: var(--dourado); font-size: 16px;">DIGITE O VALOR DA COMPRA JA COM OS JUROS INCLUSOS PARA AS PARCELAS SEREM GERADAS CORRETAMENTE!</p>
+                    <p style="color: var(--branco); font-size: 14px;">A data de compra é a data selecionada no calendário. As parcelas serão geradas no dia de vencimento informado, sempre a partir do mês seguinte à compra.</p>
+                </div>
+            </div>
+
+            <div id="campos-evento-normal" style="display:none; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label for="evento-data" style="color: var(--dourado); display: block; margin-bottom: 5px;">Data do Evento:</label>
+                    <input type="date" id="evento-data" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                </div>
+                <div class="form-group">
+                    <label for="evento-hora" style="color: var(--dourado); display: block; margin-bottom: 5px;">Hora do Evento:</label>
+                    <input type="time" id="evento-hora" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                </div>
+            </div>
+
+            <div class="controles">
+                <button onclick="salvarEvento()" style="background: var(--dourado); color: var(--preto); padding: 10px 20px; border: none; cursor: pointer; margin-right: 10px;">SALVAR</button>
+                <button onclick="fecharModal()" style="background: var(--preto); color: var(--dourado); padding: 10px 20px; border: 1px solid var(--dourado); cursor: pointer;">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar evento -->
+    <div id="modal-editar" class="modal">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h3 style="color: var(--dourado); margin: 0;">EDITAR EVENTO</h3>
+                <p id="data-selecionada-editar" style="color: var(--branco); margin: 5px 0;"></p>
+                <button onclick="fecharModalEditar()" class="fechar-btn">× FECHAR</button>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <input type="text" id="evento-descricao-editar" placeholder="Descrição" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                <input type="number" id="evento-valor-editar" placeholder="Valor R$" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                <select id="evento-tipo-editar" onchange="atualizarCamposEventoEditar()" class="select-field" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                    <option value="entrada">ENTRADA</option>
+                    <option value="saida">SAÍDA</option>
+                    <option value="normal">AGENDAMENTO</option>
+                    <option value="cartao">COMPRA NO CRÉDITO OU PARCELADA</option>
+                </select>
+
+                <!-- Campos específicos para compras no cartão -->
+                <div id="campos-evento-cartao-editar" style="display:none; margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label for="evento-parcelas-editar" style="color: var(--dourado); display: block; margin-bottom: 5px;">Número de parcelas:</label>
+                        <input type="number" id="evento-parcelas-editar" class="input-field" min="1" value="1" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                    </div>
+                    <div class="form-group">
+                        <label for="evento-vencimento-editar" style="color: var(--dourado); display: block; margin-bottom: 5px;">Vencimento do cartão (dia do mês):</label>
+                        <input type="number" id="evento-vencimento-editar" class="input-field" min="1" max="31" value="10" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                    </div>
+                    <p style="color: var(--dourado); font-size: 16px;">DIGITE O VALOR DA COMPRA JA COM OS JUROS INCLUSOS PARA AS PARCELAS SEREM GERADAS CORRETAMENTE!</p>
+                    <p style="color: var(--branco); font-size: 14px;">A data de compra é a data selecionada no calendário. As parcelas serão geradas no dia de vencimento informado, sempre a partir do mês seguinte à compra.</p>
+                </div>
+            </div>
+
+            <div id="campos-evento-normal-editar" style="display:none; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label for="evento-data-editar" style="color: var(--dourado); display: block; margin-bottom: 5px;">Data do Evento:</label>
+                    <input type="date" id="evento-data-editar" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                </div>
+                <div class="form-group">
+                    <label for="evento-hora-editar" style="color: var(--dourado); display: block; margin-bottom: 5px;">Hora do Evento:</label>
+                    <input type="time" id="evento-hora-editar" class="input-field" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--dourado); background: var(--preto); color: var(--dourado);">
+                </div>
+            </div>
+
+            <div class="controles">
+                <button onclick="atualizarEvento()" style="background: var(--dourado); color: var(--preto); padding: 10px 20px; border: none; cursor: pointer; margin-right: 10px;">ATUALIZAR</button>
+                <button onclick="fecharModalEditar()" style="background: var(--preto); color: var(--dourado); padding: 10px 20px; border: 1px solid var(--dourado); cursor: pointer;">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-personalizar" class="modal">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h3 style="color: var(--dourado); margin: 0;">Personalizar App</h3>
+                <button onclick="fecharModalPersonalizar()" class="fechar-btn" style="background: none; border: none; color: var(--dourado); font-size: 20px; cursor: pointer;">×</button>
+            </div>
+
+            <!-- Temas Pré-definidos -->
+            <div class="themes-section">
+                <h4 style="color: var(--dourado); margin-bottom: 15px;">Temas Pré-definidos</h4>
+                <div class="themes-grid">
+                    <div class="theme-card" data-theme="cyberpunk" onclick="aplicarTema('cyberpunk')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #00f6ff, #ff00c8); border: 2px solid #00f6ff;">
+                            <span style="color: #e2ffff; font-weight: bold;">CYBERPUNK</span>
+                        </div>
+                        <span class="theme-name">Cyberpunk</span>
+                    </div>
+                    <div class="theme-card" data-theme="dark" onclick="aplicarTema('dark')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ff4d24, #101010); border: 2px solid #ff4d24;">
+                            <span style="color: #f0f0f0; font-weight: bold;">DARK</span>
+                        </div>
+                        <span class="theme-name">Dark</span>
+                    </div>
+                    <div class="theme-card" data-theme="clean" onclick="aplicarTema('clean')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #0094ffff, #0a5b95d5); border: 2px solid #0094ffff;">
+                            <span style="color: #2b2b2bff; font-weight: bold;">CLEAN</span>
+                        </div>
+                        <span class="theme-name">Clean</span>
+                    </div>
+                    <div class="theme-card" data-theme="neon" onclick="aplicarTema('neon')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #3aff1d, #000000); border: 2px solid #3aff1d;">
+                            <span style="color: #1c7b0dff; font-weight: bold;">NEON</span>
+                        </div>
+                        <span class="theme-name">Neon</span>
+                    </div>
+                    <div class="theme-card" data-theme="sunset" onclick="aplicarTema('sunset')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ff3d02ff, #8c341aff); border: 2px solid #ff3d02ff;">
+                            <span style="color: #ffffff; font-weight: bold;">SUNSET</span>
+                        </div>
+                        <span class="theme-name">Sunset</span>
+                    </div>
+                    <div class="theme-card" data-theme="ocean" onclick="aplicarTema('ocean')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #6d9eff, #6f4bdb); border: 2px solid #6d9eff;">
+                            <span style="color: #e8f0ff; font-weight: bold;">OCEAN</span>
+                        </div>
+                        <span class="theme-name">Ocean</span>
+                    </div>
+                    <div class="theme-card" data-theme="forest" onclick="aplicarTema('forest')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #04992bff, #135e50); border: 2px solid #04992bff;">
+                            <span style="color: #eaffea; font-weight: bold;">FOREST</span>
+                        </div>
+                        <span class="theme-name">Forest</span>
+                    </div>
+                    <div class="theme-card" data-theme="royal" onclick="aplicarTema('royal')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ffd300, #7a3f0f); border: 2px solid #ffd300;">
+                            <span style="color: #fff8e1; font-weight: bold;">ROYAL</span>
+                        </div>
+                        <span class="theme-name">Royal</span>
+                    </div>
+
+                    <!-- Novos temas -->
+                    <div class="theme-card" data-theme="pastel" onclick="aplicarTema('pastel')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ffb7c5, #3b8ec9ff); border: 2px solid #ffb7c5;">
+                            <span style="color: #000000ff; font-weight: bold;">PASTEL</span>
+                        </div>
+                        <span class="theme-name">Pastel</span>
+                    </div>
+                    <div class="theme-card" data-theme="inferno" onclick="aplicarTema('inferno')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ff1a00, #7a0000); border: 2px solid #ff1a00;">
+                            <span style="color: #ffd1cc; font-weight: bold;">INFERNO</span>
+                        </div>
+                        <span class="theme-name">Inferno</span>
+                    </div>
+                    <div class="theme-card" data-theme="metal" onclick="aplicarTema('metal')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #d0d0d0, #3c3c3c); border: 2px solid #d0d0d0;">
+                            <span style="color: #f4f4f4; font-weight: bold;">METAL</span>
+                        </div>
+                        <span class="theme-name">Metal</span>
+                    </div>
+                    <div class="theme-card" data-theme="galaxy" onclick="aplicarTema('galaxy')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #b17dff, #442b8a); border: 2px solid #b17dff;">
+                            <span style="color: #ede6ff; font-weight: bold;">GALAXY</span>
+                        </div>
+                        <span class="theme-name">Galaxy</span>
+                    </div>
+                    <div class="theme-card" data-theme="magma" onclick="aplicarTema('magma')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ff5a00, #7a0e0081); border: 2px solid #ff5a00;">
+                            <span style="color: #ffeadd; font-weight: bold;">MAGMA</span>
+                        </div>
+                        <span class="theme-name">Magma</span>
+                    </div>
+                    <div class="theme-card" data-theme="ice" onclick="aplicarTema('ice')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #357b89ff, #02647fff); border: 2px solid #357b89ff;">
+                            <span style="color: #00303a; font-weight: bold;">ICE</span>
+                        </div>
+                        <span class="theme-name">Ice</span>
+                    </div>
+
+                    <!-- Novos temas adicionais -->
+                    <div class="theme-card" data-theme="midnight" onclick="aplicarTema('midnight')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #4a6eff, #111933); border: 2px solid #4a6eff;">
+                            <span style="color: #d9e3ff; font-weight: bold;">MIDNIGHT</span>
+                        </div>
+                        <span class="theme-name">Midnight</span>
+                    </div>
+                    <div class="theme-card" data-theme="goldblack" onclick="aplicarTema('goldblack')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ffcc33, #000000); border: 2px solid #ffcc33;">
+                            <span style="color: #ffe9a8; font-weight: bold;">GOLD BLACK</span>
+                        </div>
+                        <span class="theme-name">Gold Black</span>
+                    </div>
+                    <div class="theme-card" data-theme="sakura" onclick="aplicarTema('sakura')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #ab2f4cff, #d5496cff); border: 2px solid #ab2f4cff;">
+                            <span style="color: #000000ff; font-weight: bold;">SAKURA</span>
+                        </div>
+                        <span class="theme-name">Sakura</span>
+                    </div>
+                    <div class="theme-card" data-theme="emerald" onclick="aplicarTema('emerald')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #00c07a, #006647); border: 2px solid #00c07a;">
+                            <span style="color: #d8fff2; font-weight: bold;">EMERALD</span>
+                        </div>
+                        <span class="theme-name">Emerald</span>
+                    </div>
+                    <div class="theme-card" data-theme="storm" onclick="aplicarTema('storm')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #8eb5ff, #2f3f66); border: 2px solid #8eb5ff;">
+                            <span style="color: #e8eeff; font-weight: bold;">STORM</span>
+                        </div>
+                        <span class="theme-name">Storm</span>
+                    </div>
+                    <div class="theme-card" data-theme="berserk" onclick="aplicarTema('berserk')">
+                        <div class="theme-preview" style="background: linear-gradient(135deg, #FF0000, #000000); border: 2px solid #FF0000;">
+                            <span style="color: #ffffff; font-weight: bold;">BERSERK</span>
+                        </div>
+                        <span class="theme-name">Berserk</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personalização Avançada -->
+            <div class="advanced-customization">
+                <h4 style="color: var(--dourado); margin: 20px 0 15px 0;">Personalização Avançada</h4>
+
+                <div class="form-group">
+                    <label for="titulo-app" style="color: var(--dourado); display: block; margin-bottom: 5px;">Título do App:</label>
+                    <input type="text" id="titulo-app" placeholder="Título do App" class="input-field">
+                </div>
+
+                <div class="upload-grupo">
+                    <label class="upload-btn" for="adicionar-logo">
+                        <span class="botao-texto">Escolher Logo</span>
+                        <input type="file" accept="image/*" id="adicionar-logo" onchange="adicionarLogo(this.files)">
+                    </label>
+
+                    <label class="upload-btn" for="adicionar-fundo">
+                        <span class="botao-texto">Escolher Fundo</span>
+                        <input type="file" accept="image/*" id="adicionar-fundo" onchange="adicionarFundo(this.files)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button onclick="salvarPersonalizacao(), fecharModalPersonalizar()" class="botao-salvar">
+                    <span class="botao-texto">Salvar</span>
+                </button>
+                <button onclick="restaurarConfiguracoes(), fecharModalPersonalizar()" class="botao-resetar">
+                    <span class="botao-texto">Restaurar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal de Funcionalidades -->
+    <div id="modal-funcionalidades" class="modal">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h3 style="color: var(--dourado); margin: 0;">FUNCIONALIDADES E ATUALIZAÇÕES</h3>
+                <button onclick="fecharModalFuncionalidades()" class="fechar-btn" style="background: none; border: none; color: var(--dourado); font-size: 20px; cursor: pointer;">×</button>
+            </div>
+
+            <div class="funcionalidades-content" style="max-height: 70vh; overflow-y: auto; padding: 20px 0;">
+                <h4 style="color: var(--dourado); margin-bottom: 20px;">📱 FUNCIONALIDADES BÁSICAS</h4>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(255, 215, 0, 0.1); border-radius: 8px; border-left: 4px solid var(--dourado);">
+                    <h5 style="color: var(--dourado); margin: 0 0 10px 0;">🗓️ AGENDAMENTO</h5>
+                    <p style="color: var(--branco); margin: 0; line-height: 1.5;">
+                        <strong>Como usar:</strong> Clique em qualquer dia do calendário e selecione "Adicionar Evento". Escolha o tipo "AGENDAMENTO", defina data, hora e descrição.<br>
+                        <strong>Para quê serve:</strong> Marcar compromissos, reuniões, aniversários ou qualquer evento futuro.
+                    </p>
+                </div>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(40, 167, 69, 0.1); border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h5 style="color: #28a745; margin: 0 0 10px 0;">💰 ENTRADA</h5>
+                    <p style="color: var(--branco); margin: 0; line-height: 1.5;">
+                        <strong>Como usar:</strong> Clique no dia desejado, "Adicionar Evento", selecione "ENTRADA" e digite o valor recebido.<br>
+                        <strong>Para quê serve:</strong> Registrar salários, vendas, rendimentos ou qualquer dinheiro que entra na sua conta.
+                    </p>
+                </div>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(220, 53, 69, 0.1); border-radius: 8px; border-left: 4px solid #dc3545;">
+                    <h5 style="color: #dc3545; margin: 0 0 10px 0;">💸 SAÍDA</h5>
+                    <p style="color: var(--branco); margin: 0; line-height: 1.5;">
+                        <strong>Como usar:</strong> Clique no dia da despesa, "Adicionar Evento", selecione "SAÍDA" e informe o valor gasto.<br>
+                        <strong>Para quê serve:</strong> Registrar contas de luz, água, mercado, transporte ou qualquer gasto do dia a dia.
+                    </p>
+                </div>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(253, 126, 20, 0.1); border-radius: 8px; border-left: 4px solid #fd7e14;">
+                    <h5 style="color: #fd7e14; margin: 0 0 10px 0;">💳 COMPRA NO CRÉDITO OU PARCELADA</h5>
+                    <p style="color: var(--branco); margin: 0; line-height: 1.5;">
+                        <strong>Como usar:</strong> Selecione o dia da compra, escolha "COMPRA NO CRÉDITO OU PARCELADA", digite o valor total com juros já inclusos, número de parcelas e dia de vencimento.<br>
+                        <strong>Para quê serve:</strong> Gerenciar compras parceladas automaticamente. As parcelas aparecem no calendário nos dias de vencimento.
+                    </p>
+                </div>
+
+                <h4 style="color: var(--dourado); margin: 30px 0 20px 0;">✨ FUNCIONALIDADES NOVAS</h4>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(0, 246, 255, 0.1); border-radius: 8px; border-left: 4px solid #00f6ff;">
+                    <h5 style="color: #00f6ff; margin: 0 0 10px 0;">🎨 TEMAS PERSONALIZADOS</h5>
+                    <p style="color: var(--branco); margin: 0; line-height: 1.5;">
+                        <strong>Como usar:</strong> Clique em "Personalizar App" e escolha um dos temas pré-definidos (Cyberpunk, Dark, Neon, etc.) ou personalize cores, logo e fundo.<br>
+                        <strong>Para quê serve:</strong> Deixe o app com a sua cara! Mais de 20 temas diferentes para escolher.
+                    </p>
+                </div>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(58, 255, 29, 0.1); border-radius: 8px; border-left: 4px solid #3aff1d;">
+                    <h5 style="color: #3aff1d; margin: 0 0 10px 0;">🤖 AUTOMAÇÃO DE EVENTOS</h5>
+                    <p style="color: var(--branco); margin: 0; line-height: 1.5;">
+                        <strong>Como usar:</strong> Clique em "Automação", crie uma regra definindo título, valor, frequência (diária, semanal, mensal, anual) e período.<br>
+                        <strong>Para quê serve:</strong> Automatizar contas fixas como aluguel, internet, salário. Os eventos são criados automaticamente no calendário.
+                    </p>
+                </div>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <h5 style="color: #ffc107; margin: 0 0 10px 0;">📊 RELATÓRIOS DETALHADOS</h5>
+                    <p style="color: var(--branco); margin: 0; line-height: 1.5;">
+                        <strong>Como usar:</strong> Clique em "Relatório Mensal" ou "Relatório Anual" para ver gráficos e estatísticas completas.<br>
+                        <strong>Para quê serve:</strong> Analisar seus gastos e ganhos com gráficos interativos, balanço mensal/anual e categorias de despesas.
+                    </p>
+                </div>
+
+                <div class="funcionalidade-item" style="margin-bottom: 25px; padding: 15px; background: rgba(255, 255, 255, 0.1); border-radius: 8px; border-left: 4px solid var(--dourado);">
+                    <h5 style="color: var(--dourado); margin: 0 0 10px 0;">🎯 DICAS PARA USAR MELHOR</h5>
+                    <ul style="color: var(--branco); margin: 0; padding-left: 20px; line-height: 1.6;">
+                        <li>Use cores diferentes para identificar tipos de eventos rapidamente</li>
+                        <li>Configure automações para contas fixas e nunca esqueça uma data de pagamento</li>
+                        <li>Personalize o tema para tornar o uso mais agradável</li>
+                        <li>Verifique os relatórios mensalmente para controlar seus gastos</li>
+                        <li>Use descrições detalhadas para lembrar do que se trata cada evento</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Automação -->
+    <div id="modal-automacao" class="modal">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h3 style="color: var(--dourado); margin: 0;">AUTOMAÇÃO DE EVENTOS</h3>
+                <button onclick="fecharModalAutomacao()" class="fechar-btn" style="background: none; border: none; color: var(--dourado); font-size: 20px; cursor: pointer;">FECHAR</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="mostrarAba('criar')">Criar Automação</button>
+                <button class="tab" onclick="mostrarAba('gerenciar')">Gerenciar</button>
+            </div>
+
+            <div id="criar" class="tab-content active">
+                <form id="automation-form">
+                    <h3>Detalhes do Evento</h3>
+                    <label for="automation-title">Título:</label>
+                    <input type="text" id="automation-title" placeholder="Ex: Conta de Luz" required>
+
+                    <label for="automation-value">Valor:</label>
+                    <input type="number" id="automation-value" step="0.01" placeholder="0.00" required>
+
+                    <label for="automation-description">Descrição:</label>
+                    <textarea id="automation-description" placeholder="Descrição opcional"></textarea>
+
+                    <label for="automation-type">Tipo:</label>
+                    <select id="automation-type" onchange="atualizarCamposAutomacao()">
+                        <option value="saida">Saída</option>
+                        <option value="entrada">Entrada</option>
+                        <option value="cartao">Compra no Crédito ou Parcelada</option>
+                    </select>
+
+                    <div id="card-fields" style="display:none; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label for="card-installments">Número de parcelas:</label>
+                            <input type="number" id="card-installments" min="1" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="card-due-day">Vencimento do cartão (dia do mês):</label>
+                            <input type="number" id="card-due-day" min="1" max="31" value="10">
+                        </div>
+                        <p style="color: var(--dourado); font-size: 16px;">DIGITE O VALOR DA COMPRA JA COM OS JUROS INCLUSOS PARA AS PARCELAS SEREM GERADAS CORRETAMENTE!</p>
+                    </div>
+
+                    <h3>Recorrência</h3>
+                    <label for="recurrence-frequency">Frequência:</label>
+                    <select id="recurrence-frequency">
+                        <option value="daily">Diária</option>
+                        <option value="weekly">Semanal</option>
+                        <option value="monthly">Mensal</option>
+                        <option value="yearly">Anual</option>
+                    </select>
+
+                    <p style="color: var(--dourado); font-size: 14px; margin: 10px 0;">
+                        A frequência determina automaticamente o intervalo:<br><br>
+                        • Diária = 1 dia<br>
+                        SERÁ ADICIONADO DIA APÓS DIA O EVENTO ESCOLHIDO. ESCOLHA A DATA DE FIM PARA ESSA CATEGORIA PARA EVITAR ERROS.<br><br>
+                        • Semanal = 7 dias<br>
+                        O EVENTO SERÁ ADICIONADO A CADA 7 DIAS A PARTIR DA DATA DE INÍCIO.<br><br>
+                        • Mensal = 1 mês<br>
+                        O EVENTO SERÁ ADICIONADO NO MESMO DIA DE CADA MÊS A PARTIR DA DATA DE INÍCIO.<br><br>
+                        • Anual = 1 ano
+                        O EVENTO SERÁ ADICIONADO NO MESMO DIA E MÊS A CADA ANO A PARTIR DA DATA DE INÍCIO.<br><br>
+                    </p>
+
+                    <label for="recurrence-start">Data de Início:</label>
+                    <input type="date" id="recurrence-start" required>
+
+                    <label for="recurrence-end">Data de Fim:</label>
+                    <input type="date" id="recurrence-end">
+
+                    <div class="controles">
+                        <button type="button" id="automation-submit-btn" onclick="createAutomation()" class="botao-relatorio">
+                            <span class="botao-texto">Criar Automação</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="gerenciar" class="tab-content">
+                <div id="automations-list">
+                    <!-- Automações serão carregadas dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Gera favicon dinamicamente a partir da imagem do app -->
+    <script src="js/favicon.js" type="module"></script>
+
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>

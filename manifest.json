@@ -1,0 +1,21 @@
+{
+  "name": "AGENDA FINANCEIRA",
+  "short_name": "AGENDA FINANCEIRA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Seu app de gerenciamento e relatórios financeiros.",
+  "icons": [
+      {
+          "src": "Imagem do WhatsApp de 2024-11-14 à(s) 21.42.02_a263ffdf.jpg",
+          "sizes": "300x300",
+          "type": "image/jpg"
+      },
+      {
+          "src": "Imagem do WhatsApp de 2024-11-14 à(s) 21.42.02_a263ffdf.jpg",
+          "sizes": "512x512",
+          "type": "image/jpg"
+      }
+  ]
+}
