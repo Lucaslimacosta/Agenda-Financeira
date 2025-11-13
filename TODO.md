@@ -1,5 +1,0 @@
-- [x] Remover localStorage de eventos em js/state.js
-- [x] Remover localStorage de configurações em js/customizations.js
-- [x] Remover localStorage de automações em js/automation.js
-- [x] Desabilitar service worker em sw.js
-- [x] Testar que o app funciona sem persistência
