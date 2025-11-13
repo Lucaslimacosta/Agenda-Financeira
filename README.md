@@ -123,7 +123,7 @@ agenda-financeira/
 ### 🌐 Veja Funcionando
 Acesse a **demonstração ao vivo** da Agenda Financeira e experimente todas as funcionalidades:
 
-**[🔗 DEMONSTRAÇÃO ONLINE](https://lucascostalima.github.io/Agenda-Financeira/demonstracao/)**
+**[🔗 DEMONSTRAÇÃO ONLINE](https://agendafinanceirademo.netlify.app/)**
 
 ### 📱 Como Testar
 1. **Acesse o link acima** em qualquer navegador moderno
